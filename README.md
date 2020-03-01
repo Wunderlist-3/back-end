@@ -14,6 +14,7 @@ Base URL:
 |POST| /api/lists/| add a new list | token, list object|
 |GET| /api/lists/today| get recurring tasks | token, date object|
 |GET| /api/lists/mylists| get all lists for a user | token|
+|DELETE| /api/lists/:id| delete a list | list id|
 |POST| /api/lists/:id/tasks| add task to a list | token, list id, task object|
 
 

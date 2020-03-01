@@ -6,7 +6,8 @@ module.exports = {
     getToday,
     addListId,
     getUserLists,
-    getMyLists
+    getMyLists,
+    removeList
 }
 
 const db = require('../data/db-config')
@@ -66,3 +67,7 @@ function getMyLists(user_id){
 // JOIN users ON user_lists.user_id=users.id
 // JOIN lists ON user_lists.list_id=lists.id
 // JOIN tasks ON user_lists.list_id=tasks.list_id
+
+function removeList(id){
+    return db('lists').where({id}).del();
+}
