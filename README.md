@@ -11,9 +11,10 @@ Base URL:
 |:-----:|:-----|:-----|:-----|
 |POST| /api/auth/register| register a new user| name, username, password|
 |POST| /api/auth/login| login | username, password|
+|POST| /api/lists/| add a new list | token, list object|
 |GET| /api/lists/today| get recurring tasks | token, date object|
-|GET| /api/lists/mylists| get all lists for a user | token, date object|
-|POST| /api/lists/:id/tasks| add task to a list | list id, task object|
+|GET| /api/lists/mylists| get all lists for a user | token|
+|POST| /api/lists/:id/tasks| add task to a list | token, list id, task object|
 
 
 ### sample user object for registration
@@ -42,9 +43,18 @@ Base URL:
 }
 ```
 
+## Adding a List
+
+<https://wunderlistbuildweek.herokuapp.com/api/lists>
+this endpoint must also be passed a token on the request
+
+|Property| Required? | Type| 
+|:-----|:-----:|:-----|
+|name| YES| string| 
 
 
 ## Adding a task
+<https://wunderlistbuildweek.herokuapp.com/api/lists/:id/tasks> this endpoint must also be bassed a token on the request
 
 |Property| Required? | Type| Possible Values|
 |:-----|:-----:|:-----|:----|
