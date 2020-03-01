@@ -14,7 +14,7 @@ router.post('/', (req, res)=>{
                 .then(newList=>res.status(200).json(newList))
                 .catch(err=>{
                     console.log(err);
-                    res.status(500).json({message: 'error adding to third table'})
+                    res.status(500).json({message: 'error adding to third table', error: err.message})
                 })
         })
         .catch(err=>{
