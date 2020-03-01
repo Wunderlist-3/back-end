@@ -40,7 +40,10 @@ function getToday({day, weekDay, month}, user_id){
     return db('tasks')
     .join('lists', 'tasks.list_id', 'lists.id')
     .join('user_lists', 'user_lists.list_id', 'tasks.list_id')
-    .join('users', 'user_lists.user_id', `users.id`)
+    // .join('users', 'user_lists.user_id', `users.id`)
+    .join('users', function() {
+        this.on('user_lists.user_id', '=', 'users.id').onIn('users.id', user_id)
+      })
     .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
     
     .where({frequency: 'daily'}).where({'users.id': user_id}).orWhere({weekDay}).orWhere({day}).andWhere({month: null}).orWhere({month}).andWhere({day})
