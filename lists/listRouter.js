@@ -10,6 +10,7 @@ router.post('/', (req, res)=>{
     console.log(req.body);
     DB.addList(req.body)
         .then(list=>{
+            //heroku not waiting, maybe add setTImeout?
             DB.addListId({list_id: list[0], user_id: decodedToken.subject})
                 .then(newList=>res.status(200).json(newList))
                 .catch(err=>{
