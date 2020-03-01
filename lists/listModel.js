@@ -46,7 +46,7 @@ function getToday({day, weekDay, month}, user_id){
       })
     .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
     
-    .where({frequency: 'daily'}).where({'users.id': user_id}).orWhere({weekDay}).orWhere({day}).andWhere({month: null}).orWhere({month}).andWhere({day})
+    .where({frequency: 'daily'}).where({'users.id': user_id}).orWhere({weekDay}).orWhere({day}).andWhere({month: null}).orWhere({month}).andWhere({day}).orWhere({deleted: false})
     
 }
 
