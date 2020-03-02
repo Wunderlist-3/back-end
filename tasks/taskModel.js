@@ -4,7 +4,9 @@ module.exports = {
     getTasks,
     getTaskById,
     getDeleted,
-    addToDeleted
+    addToDeleted,
+    removeDeleted,
+    removeAssocTasks
 }
 
 const db = require('../data/db-config')
@@ -39,9 +41,18 @@ function addToDeleted(id){
 function getDeleted(){
     return db('deleted_tasks')
         .join('tasks', 'deleted_tasks.task_id', 'tasks.id')
-        .join('lists', 'tasks.list_id', 'lists.id')
+        // .join('lists', 'tasks.list_id', 'lists.id')
         // .join('user_lists', 'user_lists.list_id', 'lists.id')
         // .join('users', 'users.id', 'user_lists.user_id')
         // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
+}
+
+function removeDeleted(id){
+    return db('deleted_tasks').where({task_id: id}).del();
+}
+
+function removeAssocTasks(list_id, task){
+    task[0].deleted = 1;
+    return db('tasks').where({list_id}).update(task[0])
 }
 

@@ -20,6 +20,8 @@ router.get('/deleted', (req, res)=>{
         })
 })
 
+
+
 router.get('/:id', (req, res)=>{
     DB.getTaskById(req.params.id)
         .then(task=>res.status(200).json(task))
@@ -29,28 +31,36 @@ router.get('/:id', (req, res)=>{
         })
 })
 
+router.delete('/deleted/:id', (req, res)=>{
+    DB.removeDeleted(req.params.id)
+        .then(task=>res.status(200).json(task))
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message: 'failed to delete task'}) 
+        })
+})
+
 
 
 router.delete('/:id', TodaysDate, (req, res)=>{
     date = req.dateObj
     DB.addToDeleted(req.params.id)
         .then(del=>{
-            // DB.getTaskById(req.params.id)
-            //     .then(task=>{
-            //         task[0].deleted = 1;
-            //         console.log('task', task[0]);
-            //         DB.updateTask(req.params.id, task[0])
-            //             .then(updated=>res.status(200).json(updated))
-            //             .catch(err=>{
-            //                 console.log(err);
-            //                 res.status(500).json({message: 'error updating deleted status'})
-            //             })
-            //     })
-            //     .catch(err=>{
-            //         console.log(err);
-            //         res.status(500).json({message: 'failed to get task by id'}) 
-            res.status(200).json(del)
-        // })
+            DB.getTaskById(req.params.id)
+                .then(task=>{
+                    task[0].deleted = 1;
+                    console.log('task', task[0]);
+                    DB.updateTask(req.params.id, task[0])
+                        .then(updated=>res.status(200).json(updated))
+                        .catch(err=>{
+                            console.log(err);
+                            res.status(500).json({message: 'error updating deleted status'})
+                        })
+                })
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'failed to get task by id'}) 
+                })
         })
         .catch(err=>{
             console.log(err);

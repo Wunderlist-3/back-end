@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const DB = require('./listModel');
+const Tasks = require('../tasks/taskModel')
 const TodaysDate = require('../middleware/date')
 
 //add a new list for logged in user
@@ -36,6 +37,17 @@ router.get('/mylists', (req,res)=>{
         })
 })
 
+
+//get all tasks on a particular list
+router.get('/:id/tasks', (req, res)=>{
+    DB.getListTasks(req.params.id)
+        .then(tasks=>res.status(200).json(tasks))
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message: 'server error'})
+        })
+})
+
 router.put('/:id', (req, res)=>{
     DB.updateList(req.params.id, req.body)
         .then(list=>res.status(200).json(list))
@@ -46,19 +58,35 @@ router.put('/:id', (req, res)=>{
 })
 
 router.delete('/:id', (req, res)=>{
+    DB.getListTasks(req.params.id)
+        .then(tasks=>{
+            tasks.forEach(task=> {
+                task.deleted = 1;
+                Tasks.addToDeleted(task.id);
+            });
+            //remove from lists
     DB.removeList(req.params.id)
-        .then(rem=>{
-            DB.removeUserList(req.params.id, req.decodedToken.subject)
-                .then(rem=>res.status(200).json(rem))
-                .catch(err=>{
-                    console.log(err);
-                    res.status(500).json({message: 'error deleting from userlists'})
-                })
+    .then(rem=>{
+        //remove from user_lists
+        DB.removeUserList(req.params.id, req.decodedToken.subject)
+            .then(rem=>{res.status(200).json(rem)})
+            .catch(err=>{
+                console.log(err);
+                res.status(500).json({message: 'error deleting from userlists'})
+            })
+    })
+    .catch(err=>{
+        console.log(err);
+        res.status(500).json({message: 'error deleting from lists'})
+    })
+            
+
         })
         .catch(err=>{
             console.log(err);
-            res.status(500).json({message: 'error deleting from lists'})
+            res.status(500).json({message: 'server error'})
         })
+    
 })
 
 
