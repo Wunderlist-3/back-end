@@ -24,7 +24,7 @@ router.post('/register', (req, res)=>{
                         .then(newList=>res.status(200).json(newList))
                         .catch(err=>{
                             console.log(err);
-                            res.status(500).json({message: 'error adding to third table', error: err.message})
+                            res.status(500).json({message: 'error adding to third table', error: err.message, list: list, newList: newList, user: user})
                         })
                     }, 5000)
                 })
