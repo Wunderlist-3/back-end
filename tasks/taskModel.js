@@ -37,6 +37,11 @@ function addToDeleted(id){
 }
 
 function getDeleted(){
-    return db('deleted_tasks');
+    return db('deleted_tasks')
+        .join('tasks', 'deleted_tasks.task_id', 'tasks.id')
+        .join('lists', 'tasks.list_id', 'lists.id')
+        // .join('user_lists', 'user_lists.list_id', 'lists.id')
+        // .join('users', 'users.id', 'user_lists.user_id')
+        // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
 }
 

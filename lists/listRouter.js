@@ -36,14 +36,31 @@ router.get('/mylists', (req,res)=>{
         })
 })
 
-router.delete('/:id', (req, res)=>{
-    DB.removeList(req.params.id)
-        .then(rem=>res.status(200).json(rem))
+router.put('/:id', (req, res)=>{
+    DB.updateList(req.params.id, req.body)
+        .then(list=>res.status(200).json(list))
         .catch(err=>{
             console.log(err);
             res.status(500).json({message: 'server error'})
         })
 })
+
+router.delete('/:id', (req, res)=>{
+    DB.removeList(req.params.id)
+        .then(rem=>{
+            DB.removeUserList(req.params.id, req.decodedToken.subject)
+                .then(rem=>res.status(200).json(rem))
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'error deleting from userlists'})
+                })
+        })
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message: 'error deleting from lists'})
+        })
+})
+
 
 
 //add a task, stating the id of the list you want to add to

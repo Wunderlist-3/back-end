@@ -11,6 +11,15 @@ router.get('/', (req, res)=>{
         })
 })
 
+router.get('/deleted', (req, res)=>{
+    DB.getDeleted()
+        .then(tasks=>res.status(200).json(tasks))
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message: 'server error'}) 
+        })
+})
+
 router.get('/:id', (req, res)=>{
     DB.getTaskById(req.params.id)
         .then(task=>res.status(200).json(task))
@@ -20,14 +29,7 @@ router.get('/:id', (req, res)=>{
         })
 })
 
-router.get('/trash', (req, res)=>{
-    DB.getDeleted()
-        .then(tasks=>res.status(200).json(tasks))
-        .catch(err=>{
-            console.log(err);
-            res.status(500).json({message: 'server error'}) 
-        })
-})
+
 
 router.delete('/:id', TodaysDate, (req, res)=>{
     date = req.dateObj

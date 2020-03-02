@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const Users = require('./userModel');
+const DB = require('../lists/listModel');
 const generateToken = require('./generateToken')
 
 
@@ -9,7 +10,25 @@ router.post('/register', (req, res)=>{
     const hash = bcrypt.hashSync(newUser.password, 12);
     newUser.password = hash;
     Users.add(newUser)
-        .then(user=>res.status(201).json(user))
+        .then(user=>{
+            const newList = {
+                name: "Today"
+            }
+            DB.addList(newList)
+                .then(list=>{
+            //heroku not waiting, maybe add setTimeout?
+                    DB.addListId({list_id: list[0], user_id: user[0]})
+                        .then(newList=>res.status(200).json(newList))
+                        .catch(err=>{
+                            console.log(err);
+                            res.status(500).json({message: 'error adding to third table', error: err.message})
+                        })
+                })
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'server error'})
+                })
+        })
         .catch(err=>{
             console.log(err);
             res.status(500).json({message: 'error registering new user'})

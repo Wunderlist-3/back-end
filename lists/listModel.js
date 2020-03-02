@@ -7,7 +7,8 @@ module.exports = {
     getUserLists,
     getMyLists,
     removeList,
-    updateList
+    updateList,
+    removeUserList
 }
 
 const db = require('../data/db-config')
@@ -54,9 +55,9 @@ function getMyLists(user_id){
     return db('user_lists')
         .join('users', 'user_lists.user_id', 'users.id')
         .join('lists', 'user_lists.list_id', 'lists.id')
-        .join('tasks', 'user_lists.list_id', 'tasks.list_id')
-        .select('user_lists.list_id', 'user_id', 'users.username', 'lists.name', 'tasks.description')
-        // .select('user_lists.list_id', 'user_id', 'users.username', 'lists.name')
+        // .join('tasks', 'user_lists.list_id', 'tasks.list_id')
+        // .select('user_lists.list_id', 'user_id', 'users.username', 'lists.name', 'tasks.description')
+        .select('user_lists.list_id', 'user_id', 'users.username', 'lists.name')
         .where({user_id})
 }
 
@@ -74,10 +75,6 @@ function updateList(id, list){
     return db('lists').where({id}).update(list);
 }
 
-function removeTask(id){
-    return db('tasks').where({id}).del();
-}
-
-function updateTask(id, task){
-    return db('tasks').where({id}).update(task);
+function removeUserList(id, user_id){
+    return db('user_lists').where({list_id: id}).andWhere({user_id}).del()
 }

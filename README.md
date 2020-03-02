@@ -12,10 +12,14 @@ Base URL:
 |POST| /api/auth/register| register a new user| name, username, password|
 |POST| /api/auth/login| login | username, password|
 |POST| /api/lists/| add a new list | token, list object|
+|POST| /api/lists/:id/tasks| add task to a list | token, list id, task object|
 |GET| /api/lists/today| get recurring tasks | token, date object|
 |GET| /api/lists/mylists| get all lists for a user | token|
+|PUT| /api/lists/:id| edit a list name | list id, list object|
+|PUT| /api/tasks/:id| edit a task | task id, updated task object|
 |DELETE| /api/lists/:id| delete a list | list id|
-|POST| /api/lists/:id/tasks| add task to a list | token, list id, task object|
+|DELETE| /api/tasks/:id| delete a task | task id|
+
 
 
 ### sample user object for registration
