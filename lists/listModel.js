@@ -1,5 +1,4 @@
 module.exports = {
-    getTasks,
     getLists,
     addList,
     addTask,
@@ -7,14 +6,13 @@ module.exports = {
     addListId,
     getUserLists,
     getMyLists,
-    removeList
+    removeList,
+    updateList
 }
 
 const db = require('../data/db-config')
 
-function getTasks(){
-    return db('tasks');
-}
+
 
 function getLists(){
     return db('lists');
@@ -70,4 +68,16 @@ function getMyLists(user_id){
 
 function removeList(id){
     return db('lists').where({id}).del();
+}
+
+function updateList(id, list){
+    return db('lists').where({id}).update(list);
+}
+
+function removeTask(id){
+    return db('tasks').where({id}).del();
+}
+
+function updateTask(id, task){
+    return db('tasks').where({id}).update(task);
 }
