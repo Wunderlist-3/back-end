@@ -39,7 +39,7 @@ function addTask(task, list_id){
     return db('tasks').where({list_id}).insert(task).returning('*')
 }
 
-function getToday({day, weekDay, month}, user_id){
+function getToday({day, weekday, month}, user_id){
     console.log('user_id from the listmodel', user_id);
     return db('tasks')
     .join('lists', 'tasks.list_id', 'lists.id')
@@ -50,7 +50,11 @@ function getToday({day, weekDay, month}, user_id){
       })
     .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
     
-    .where({frequency: 'daily'}).where({'users.id': user_id}).orWhere({weekDay}).orWhere({day}).andWhere({month: null}).orWhere({month}).andWhere({day}).orWhere({deleted: false})
+    .where({frequency: 'daily'}).where({'users.id': user_id}).where({deleted: 0})
+    
+    .orWhere({frequency: 'weekly'}).andWhere({weekday})
+    
+    .orWhere({frequency: 'monthly'}).andWhere({day}).andWhere({month: null}).orWhere({frequency: 'annually'}).andWhere({month}).andWhere({day})
     
 }
 

@@ -4,12 +4,12 @@ module.exports = (req, res, next) => {
     const date = new Date(now + (offset));
     const dateStr = date.toUTCString().toLowerCase();
     console.log('date', dateStr);
-    const weekDay = dateStr.split("").splice(0,3).join("");
+    const weekday = dateStr.split("").splice(0,3).join("");
     const month = dateStr.split(" ")[2];
     const day = dateStr.split(" ")[1];
     const dateObj = {
         day,
-        weekDay,
+        weekday,
         month
     }
     req.dateObj = dateObj;
