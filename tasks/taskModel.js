@@ -58,20 +58,22 @@ function getDeleted(){
         // .join('lists', 'tasks.list_id', 'lists.id')
         // .join('user_lists', 'user_lists.list_id', 'lists.id')
         // .join('users', 'users.id', 'user_lists.user_id')
-        // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
+        .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
 }
 
 function removeDeleted(tasks){
     const now = Date.now();
-            var offset = new Date().getTimezoneOffset();
-            // const date = new Date(now + (offset));
-            const expireddate = tasks[0].date_expired;
-            console.log(expireddate);
-            const date = '2020-03-09T04:00:00.000Z';
-    return db('deleted_tasks').join('tasks', 'deleted_tasks.task_id', 'tasks.id').select("*")
+    var offset = new Date().getTimezoneOffset();
+    const date = '2021-01-01T04:00:00.000Z';
+    return db('deleted_tasks').where(tasks.date_expired >= date).del()
+
+    }
+    
+
+    // return db('deleted_tasks').join('tasks', 'deleted_tasks.task_id', 'tasks.id').select("*")
     
     // .where(tasks.deleted = ).del().returning('*')
-}
+
 
 function removeAssocTasks(list_id, task){
     task[0].deleted = 1;

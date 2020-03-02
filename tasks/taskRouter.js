@@ -52,18 +52,24 @@ router.get('/', (req, res)=>{
 router.get('/deleted', (req, res)=>{
     DB.getDeleted()
         .then(tasks=>{
-            console.log(tasks);
-            DB.removeDeleted(tasks)
-                .then(rem=>res.status(200).json(rem))
-                .catch(err=>{
-                    console.log(err);
-                    res.status(500).json({message: 'server error'})
-                })
-            // res.status(200).json(tasks)
+            // console.log(tasks);
+            // if (tasks){
+            //     DB.removeDeleted(tasks)
+            //     .then(rem=>res.status(200).json(rem))
+            //     .catch(err=>{
+            //         console.log(err);
+            //         res.status(500).json({message: 'server error'})
+            //     })
+            // } else {
+            //     res.status(200).json(tasks)
+            // }
+            
+            res.status(200).json(tasks)
+            
         })
         .catch(err=>{
             console.log(err);
-            res.status(500).json({message: 'failed to get task by id'}) 
+            res.status(500).json({message: 'failed to get deleted tasks'}) 
         })
 })
 
