@@ -14,7 +14,9 @@ router.post('/register', (req, res)=>{
             const newList = {
                 name: "Today"
             }
-            DB.addList(newList)
+
+            setTimeout(function(){
+                DB.addList(newList)
                 .then(list=>{
             //heroku not waiting, maybe add setTimeout?
                     DB.addListId({list_id: list[0], user_id: user[0]})
@@ -28,6 +30,8 @@ router.post('/register', (req, res)=>{
                     console.log(err);
                     res.status(500).json({message: 'server error'})
                 })
+            }, 500)
+            
         })
         .catch(err=>{
             console.log(err);
