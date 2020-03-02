@@ -7,14 +7,16 @@ Base URL:
 <https://wunderlistbuildweek.herokuapp.com/>
 
 
+all /list and /task routes require a token
+
 |Method| URL | Description| Requirements|
 |:-----:|:-----|:-----|:-----|
 |POST| /api/auth/register| register a new user| name, username, password|
 |POST| /api/auth/login| login | username, password|
-|POST| /api/lists/| add a new list | token, list object|
-|POST| /api/lists/:id/tasks| add task to a list | token, list id, task object|
-|GET| /api/lists/today| get recurring tasks | token, date object|
-|GET| /api/lists/mylists| get all lists for a user | token|
+|POST| /api/lists/| add a new list |list object|
+|POST| /api/lists/:id/tasks| add task to a list |list id, task object|
+|GET| /api/lists/today| get recurring tasks |date object|
+|GET| /api/lists/mylists| get all lists for a user |
 |PUT| /api/lists/:id| edit a list name | list id, list object|
 |PUT| /api/tasks/:id| edit a task | task id, updated task object|
 |DELETE| /api/lists/:id| delete a list | list id|
