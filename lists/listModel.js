@@ -24,11 +24,11 @@ function getListTasks(list_id){
 }
 
 function addList(list){
-    return db('lists').insert(list);
+    return db('lists').insert(list).returning('*')
 }
 
 function addListId(list){
-    return db('user_lists').insert(list);
+    return db('user_lists').insert(list).returning('*');
 }
 
 function getUserLists(){
@@ -36,7 +36,7 @@ function getUserLists(){
 }
 
 function addTask(task, list_id){
-    return db('tasks').where({list_id}).insert(task);
+    return db('tasks').where({list_id}).insert(task).returning('*')
 }
 
 function getToday({day, weekDay, month}, user_id){

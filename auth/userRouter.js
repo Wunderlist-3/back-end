@@ -11,31 +11,22 @@ router.post('/register', (req, res)=>{
     newUser.password = hash;
     Users.add(newUser)
         .then(user=>{
-
-            res.status(201).json(user);
-            // const newList = {
-            //     name: "Today"
-            // }
-
-            
-            //     DB.addList(newList)
-            //     .then(list=>{
-            // //heroku not waiting, maybe add setTimeout?
-            // setTimeout(function(){
-            //         DB.addListId({list_id: list[0], user_id: user[0]})
-            //             .then(newList=>res.status(200).json(newList))
-            //             .catch(err=>{
-            //                 console.log(err);
-            //                 res.status(500).json({message: 'error adding to third table', error: err.message, list: list, newList: newList, user: user})
-            //             })
-            //         }, 5000)
-            //     })
-            //     .catch(err=>{
-            //         console.log(err);
-            //         res.status(500).json({message: 'server error'})
-            //     })
-            
-            
+            const newList = {
+                name: "Today"
+            }
+                DB.addList(newList)
+                .then(list=>{
+                    DB.addListId({list_id: list[0].id, user_id: user[0].id})
+                        .then(newList=>res.status(200).json(newList))
+                        .catch(err=>{
+                            console.log(err);
+                            res.status(500).json({message: 'error adding to third table', error: err.message, list: list, newList: newList, user: user})
+                        })
+                })
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'server error'})
+                })
         })
         .catch(err=>{
             console.log(err);

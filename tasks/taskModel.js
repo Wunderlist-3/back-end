@@ -12,11 +12,11 @@ module.exports = {
 const db = require('../data/db-config')
 
 function getTasks(){
-    return db('tasks');
+    return db('tasks').returning('*')
 }
 
 function getTaskById(id){
-    return db('tasks').where({id});
+    return db('tasks').where({id}).returning('*')
 }
 
 function removeTask(id){
@@ -24,7 +24,7 @@ function removeTask(id){
 }
 
 function updateTask(id, task){
-    return db('tasks').where({id}).update(task);
+    return db('tasks').where({id}).update(task).returning('*')
 }
 
 function addToDeleted(id){
@@ -35,7 +35,7 @@ function addToDeleted(id){
         date_deleted: now, 
         date_expired: now + 604800
     }
-    return db('deleted_tasks').insert(task)
+    return db('deleted_tasks').insert(task).returning('*')
 }
 
 function getDeleted(){
@@ -48,11 +48,11 @@ function getDeleted(){
 }
 
 function removeDeleted(id){
-    return db('deleted_tasks').where({task_id: id}).del();
+    return db('deleted_tasks').where({task_id: id}).del().returning('*')
 }
 
 function removeAssocTasks(list_id, task){
     task[0].deleted = 1;
-    return db('tasks').where({list_id}).update(task[0])
+    return db('tasks').where({list_id}).update(task[0]).returning('*')
 }
 
