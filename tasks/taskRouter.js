@@ -11,16 +11,61 @@ router.get('/', (req, res)=>{
         })
 })
 
+// router.get('/deleted', (req, res)=>{
+//     const now = Date.now();
+//     var offset = new Date().getTimezoneOffset();
+//     const date = new Date(now + (offset));
+//     // const dateStr = date.toUTCString().toLowerCase();
+//     const dateStr = "2020-03-09T04:00:00.000Z"
+
+//     DB.getDeleted()
+//         .then(tasks=>{
+//             const now = Date.now();
+//             var offset = new Date().getTimezoneOffset();
+//             // const date = new Date(now + (offset));
+//             const expireddate = tasks[0].date_expired;
+//             console.log(expireddate);
+//             const date = '2020-03-09T04:00:00.000Z';
+//             tasks.forEach(task=>{
+//                 if(task.date_expired <= date){
+//                     DB.removeDeleted(task.task_id)
+//                         .then(task=>res.status(200).json(task))
+//                         .catch(err=>{
+//                             console.log(err);
+//                             res.status(500).json({message: 'failed to delete task'}) 
+//                         })
+//             // res.status(200).json(tasks);
+//                 } else {
+//                     res.status(200).json(tasks)
+//                 }
+//             })
+
+
+//         })
+//         .catch(err=>{
+//             console.log(err);
+//             res.status(500).json({message: 'server error'}) 
+//         })
+// })
+
+
 router.get('/deleted', (req, res)=>{
     DB.getDeleted()
-        .then(tasks=>res.status(200).json(tasks))
+        .then(tasks=>{
+            console.log(tasks);
+            DB.removeDeleted(tasks)
+                .then(rem=>res.status(200).json(rem))
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'server error'})
+                })
+            // res.status(200).json(tasks)
+        })
         .catch(err=>{
             console.log(err);
-            res.status(500).json({message: 'server error'}) 
+            res.status(500).json({message: 'failed to get task by id'}) 
         })
 })
-
-
 
 router.get('/:id', (req, res)=>{
     DB.getTaskById(req.params.id)

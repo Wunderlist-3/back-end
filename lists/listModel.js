@@ -20,7 +20,7 @@ function getLists(){
 }
 
 function getListTasks(list_id){
-    return db('tasks').where({list_id})
+    return db('tasks').where({list_id}).andWhere({deleted: false})
 }
 
 function addList(list){
@@ -50,7 +50,7 @@ function getToday({day, weekday, month}, user_id){
       })
     .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
     
-    .where({frequency: 'daily'}).where({'users.id': user_id}).where({deleted: 0})
+    .where({frequency: 'daily'}).where({'users.id': user_id}).where({deleted: true})
     
     .orWhere({frequency: 'weekly'}).andWhere({weekday})
     

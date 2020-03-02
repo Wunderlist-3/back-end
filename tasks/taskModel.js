@@ -28,12 +28,25 @@ function updateTask(id, task){
 }
 
 function addToDeleted(id){
-    console.log('from task model', id);
     const now = Date.now();
+    const next = new Date().setDate(+9);
+
+
+    var offset = new Date().getTimezoneOffset();
+
+
+    const date = new Date(now + (offset));
+    const nextweek = new Date(next + (offset));
+    const dateStr = date.toUTCString().toLowerCase();
+    const nextweekStr = nextweek.toUTCString()
+
+
+
+
     const task = {
         task_id: id,
-        date_deleted: now, 
-        date_expired: now + 604800
+        date_deleted: dateStr, 
+        date_expired: nextweekStr
     }
     return db('deleted_tasks').insert(task).returning('*')
 }
@@ -41,14 +54,23 @@ function addToDeleted(id){
 function getDeleted(){
     return db('deleted_tasks')
         .join('tasks', 'deleted_tasks.task_id', 'tasks.id')
+
         // .join('lists', 'tasks.list_id', 'lists.id')
         // .join('user_lists', 'user_lists.list_id', 'lists.id')
         // .join('users', 'users.id', 'user_lists.user_id')
         // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
 }
 
-function removeDeleted(id){
-    return db('deleted_tasks').where({task_id: id}).del().returning('*')
+function removeDeleted(tasks){
+    const now = Date.now();
+            var offset = new Date().getTimezoneOffset();
+            // const date = new Date(now + (offset));
+            const expireddate = tasks[0].date_expired;
+            console.log(expireddate);
+            const date = '2020-03-09T04:00:00.000Z';
+    return db('deleted_tasks').join('tasks', 'deleted_tasks.task_id', 'tasks.id').select("*")
+    
+    // .where(tasks.deleted = ).del().returning('*')
 }
 
 function removeAssocTasks(list_id, task){
