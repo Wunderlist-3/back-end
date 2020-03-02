@@ -15,22 +15,24 @@ router.post('/register', (req, res)=>{
                 name: "Today"
             }
 
-            setTimeout(function(){
+            
                 DB.addList(newList)
                 .then(list=>{
             //heroku not waiting, maybe add setTimeout?
+            setTimeout(function(){
                     DB.addListId({list_id: list[0], user_id: user[0]})
                         .then(newList=>res.status(200).json(newList))
                         .catch(err=>{
                             console.log(err);
                             res.status(500).json({message: 'error adding to third table', error: err.message})
                         })
+                    }, 500)
                 })
                 .catch(err=>{
                     console.log(err);
                     res.status(500).json({message: 'server error'})
                 })
-            }, 500)
+            
             
         })
         .catch(err=>{
