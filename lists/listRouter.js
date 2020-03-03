@@ -12,7 +12,7 @@ router.post('/', (req, res)=>{
     DB.addList(req.body)
         .then(list=>{
             DB.addListId({list_id: list[0].id, user_id: decodedToken.subject})
-                .then(newList=>res.status(200).json(newList))
+                .then(newList=>res.status(200).json(list))
                 .catch(err=>{
                     console.log(err);
                     res.status(500).json({message: 'error adding to third table', error: err.message})

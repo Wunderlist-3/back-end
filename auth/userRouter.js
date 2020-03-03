@@ -51,4 +51,16 @@ router.post('/login', (req, res)=>{
         })
 })
 
+router.delete('/deleteuser', (req, res)=>{
+    const {username} = req.body;
+    Users.removeUser(username)
+        .then(user=>{
+            user ? res.status(200).json(user) : res.status(404).json({message: 'user does not exist'})
+        })
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message:'server error'})
+        })
+})
+
 module.exports=router;

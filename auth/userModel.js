@@ -1,6 +1,7 @@
 module.exports = {
     add,
-    findByUsername
+    findByUsername,
+    removeUser
 }
 
 const db = require('../data/db-config');
@@ -14,3 +15,7 @@ function findByUsername(username){
     return db('users').where({username})
 }
 
+function removeUser(username){
+    console.log('from removeUser', username)
+    return db('users').where({username}).del().returning('*')
+}
