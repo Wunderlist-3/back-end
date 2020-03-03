@@ -9,7 +9,8 @@ module.exports = {
     removeList,
     updateList,
     removeUserList,
-    getListTasks
+    getListTasks,
+    getMonth
 }
 
 const db = require('../data/db-config')
@@ -55,6 +56,26 @@ function getToday({day, weekday, month}, user_id){
     .orWhere({frequency: 'weekly'}).andWhere({weekday})
     
     .orWhere({frequency: 'monthly'}).andWhere({day}).andWhere({month: null}).orWhere({frequency: 'annually'}).andWhere({month}).andWhere({day})
+    
+}
+
+function getMonth({day, weekday, month}, user_id){
+    console.log('user_id from the listmodel', user_id);
+    return db('tasks')
+    .join('lists', 'tasks.list_id', 'lists.id')
+    .join('user_lists', 'user_lists.list_id', 'tasks.list_id')
+    // .join('users', 'user_lists.user_id', `users.id`)
+    .join('users', function() {
+        this.on('user_lists.user_id', '=', 'users.id').onIn('users.id', user_id)
+      })
+    .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
+    
+    .where({frequency: 'daily'}).where({'users.id': user_id}).where({deleted: 1})
+    
+    .orWhere({frequency: 'weekly'}).andWhere({weekday})
+    
+    .orWhere({frequency: 'monthly'})
+    .orWhere({frequency: 'annually'}).andWhere({month})
     
 }
 

@@ -15,7 +15,8 @@ all /list and /task routes require a token
 |POST| /api/auth/login| login | username, password|
 |POST| /api/lists/| add a new list |list object|
 |POST| /api/lists/:id/tasks| add task to a list |list id, task object|
-|GET| /api/lists/today| get recurring tasks |date object|
+|GET| /api/lists/today| get recurring tasks for current day|date object|
+|GET| /api/lists/month| get recurring tasks for the current month |date object|
 |GET| /api/lists/mylists| get all lists for a user |
 |GET| /api/lists/:id/tasks| get all tasks for a list |list id|
 |GET| /api/tasks/deleted| all deleted tasks |

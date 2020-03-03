@@ -113,5 +113,16 @@ router.get('/today', TodaysDate, (req, res)=>{
         })
 })
 
+router.get('/month', TodaysDate, (req, res)=>{
+    console.log('date', req.dateObj);
+    DB.getMonth(req.dateObj, req.decodedToken.subject)
+    // DB.getTasks()
+        .then(daily => res.status(200).json(daily))
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({message: 'server error'})
+        })
+})
+
 
 module.exports=router;
