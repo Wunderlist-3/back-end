@@ -18,6 +18,8 @@ all /list and /task routes require a token
 |GET| /api/lists/today| get recurring tasks |date object|
 |GET| /api/lists/mylists| get all lists for a user |
 |GET| /api/lists/:id/tasks| get all tasks for a list |list id|
+|GET| /api/tasks/deleted| all deleted tasks |
+|GET| /api/tasks/restore/:id| restores deleted task | task id|
 |PUT| /api/lists/:id| edit a list name | list id, list object|
 |PUT| /api/tasks/:id| edit a task | task id, updated task object|
 |DELETE| /api/lists/:id| delete a list | list id|
