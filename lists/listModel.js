@@ -68,7 +68,7 @@ function getMonth({day, weekday, month}, user_id){
     .join('users', function() {
         this.on('user_lists.user_id', '=', 'users.id').onIn('users.id', user_id)
       })
-    .select('users.id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
+    .select('tasks.id as task_id', 'users.id as user_id', 'lists.id as list_id', 'users.username', 'lists.name', 'tasks.description', 'tasks.frequency', 'tasks.day', 'tasks.weekday', 'tasks.month')
     
     .where({frequency: 'daily'}).where({'users.id': user_id}).where({deleted: 1})
     
