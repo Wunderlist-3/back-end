@@ -32,7 +32,7 @@ router.get('/deleted', (req, res)=>{
                 console.log('expired string', expiredstring);
                 console.log('exp1', exp1)
                 console.log('exp', exp, 'please', please)
-                if (exp >= please){
+                if (exp <= please){
                     return task.task_id;
                 }
             })
