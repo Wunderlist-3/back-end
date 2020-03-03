@@ -118,7 +118,7 @@ router.delete('/:id', TodaysDate, (req, res)=>{
         })
         .catch(err=>{
             console.log(err);
-            res.status(500).json({message: 'error adding to deleted'}) 
+            res.status(500).json({message: 'error adding to deleted', error: err.message}) 
         })
 })
 
