@@ -32,20 +32,21 @@ router.get('/deleted', (req, res)=>{
                 console.log('expired string', expiredstring);
                 console.log('exp1', exp1)
                 console.log('exp', exp, 'please', please)
-                if (exp <= please){
+                if (exp >= please){
                     return task.task_id;
                 }
             })
             console.log('newTasks', newTasks);
             if (newTasks[0] !== undefined){
-                DB.removeDeleted(userID, newTasks)
+                const filtered = newTasks.filter(task=>task!==undefined);
+                DB.removeDeleted(filtered)
                 .then(rem=>{
 
                     setTimeout(function(){
                         rem? 
                     DB.getDeleted(userID)
                         .then(deltasks=>{
-                            DB.removeTask(newTasks)
+                            DB.removeTask(filtered)
                                 .then(del=>res.status(200).json(del))
                                 .catch(err=>{
                                     console.log(err);
