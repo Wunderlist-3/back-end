@@ -56,7 +56,7 @@ router.get('/deleted', (req, res)=>{
                 })
                 .catch(err=>{
                     console.log(err);
-                    res.status(500).json({message: 'server error'})
+                    res.status(500).json({message: 'server error', error: err.message})
                 })
             } else {
                 res.status(200).json(tasks)
