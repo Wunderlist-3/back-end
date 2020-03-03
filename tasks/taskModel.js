@@ -51,15 +51,16 @@ function addToDeleted(id){
     return db('deleted_tasks').insert(task).returning('*')
 }
 
-function getDeleted(){
+function getDeleted(id){
     return db('deleted_tasks')
         .join('tasks', 'deleted_tasks.task_id', 'tasks.id')
 
-        // .join('lists', 'tasks.list_id', 'lists.id')
-        // .join('user_lists', 'user_lists.list_id', 'lists.id')
-        // .join('users', 'users.id', 'user_lists.user_id')
+        .join('lists', 'tasks.list_id', 'lists.id')
+        .join('user_lists', 'user_lists.list_id', 'lists.id')
+        .join('users', 'users.id', 'user_lists.user_id')
         // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
-        .select('task_id', 'tasks.description', 'date_deleted', 'date_expired')
+        .select('task_id', 'lists.id as list_id', 'users.id as user_id', 'tasks.description', 'date_deleted', 'date_expired')
+        .where({user_id: id})
 }
 
 function removeDeleted(taskids){

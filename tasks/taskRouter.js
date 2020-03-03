@@ -14,7 +14,7 @@ router.get('/', (req, res)=>{
 
 //look at trash
 router.get('/deleted', (req, res)=>{
-    DB.getDeleted()
+    DB.getDeleted(req.decodedToken.subject)
         .then(tasks=>{
             // console.log(tasks);
             let newTasks = tasks.map(task=>{
@@ -39,7 +39,7 @@ router.get('/deleted', (req, res)=>{
                 DB.removeDeleted(newTasks)
                 .then(rem=>{
                     rem? 
-                    DB.getDeleted()
+                    DB.getDeleted(req.decodedToken.subject)
                         .then(deltasks=>{
                             DB.removeTask(newTasks)
                                 .then(del=>res.status(200).json(del))
@@ -156,7 +156,9 @@ router.get('/restore/:id', (req, res)=>{
             res.status(500).json({message: 'failed to get task by id'}) 
         })
     
-    //delete from deleted_tasks
+
 })
+
+
 
 module.exports=router;
