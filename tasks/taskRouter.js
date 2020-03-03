@@ -14,7 +14,8 @@ router.get('/', (req, res)=>{
 
 //look at trash
 router.get('/deleted', (req, res)=>{
-    DB.getDeleted(req.decodedToken.subject)
+    const userID = req.decodedToken.subject
+    DB.getDeleted(userID)
         .then(tasks=>{
             // console.log(tasks);
             let newTasks = tasks.map(task=>{
@@ -36,10 +37,10 @@ router.get('/deleted', (req, res)=>{
             })
             console.log('newTasks', newTasks);
             if (newTasks[0] !== undefined){
-                DB.removeDeleted(newTasks)
+                DB.removeDeleted(userID, newTasks)
                 .then(rem=>{
                     rem? 
-                    DB.getDeleted(req.decodedToken.subject)
+                    DB.getDeleted(userID)
                         .then(deltasks=>{
                             DB.removeTask(newTasks)
                                 .then(del=>res.status(200).json(del))
@@ -79,14 +80,14 @@ router.get('/:id', (req, res)=>{
         })
 })
 
-router.delete('/deleted/:id', (req, res)=>{
-    DB.removeDeleted(req.params.id)
-        .then(task=>res.status(200).json(task))
-        .catch(err=>{
-            console.log(err);
-            res.status(500).json({message: 'failed to delete task'}) 
-        })
-})
+// router.delete('/deleted/:id', (req, res)=>{
+//     DB.removeDeleted(req.params.id)
+//         .then(task=>res.status(200).json(task))
+//         .catch(err=>{
+//             console.log(err);
+//             res.status(500).json({message: 'failed to delete task'}) 
+//         })
+// })
 
 
 
