@@ -53,18 +53,44 @@ router.get('/deleted', (req, res)=>{
     DB.getDeleted()
         .then(tasks=>{
             // console.log(tasks);
-            // if (tasks){
-            //     DB.removeDeleted(tasks)
-            //     .then(rem=>res.status(200).json(rem))
-            //     .catch(err=>{
-            //         console.log(err);
-            //         res.status(500).json({message: 'server error'})
-            //     })
-            // } else {
-            //     res.status(200).json(tasks)
-            // }
+            let newTasks = tasks.map(task=>{
+                const now = Date.now();
+                var offset = new Date().getTimezoneOffset();
+                const date = new Date(now + (offset));
+                console.log('date', now)
+                const expireddate = task.date_expired;
+                const expiredstring = expireddate.toUTCString()
+                const exp1 = Date.now(expiredstring);
+                const exp = Number(exp1)
+                const please = Number(now);
+                // const date = '2020-03-09T04:00:00.000Z';
+                console.log(task);
+                console.log('exp', exp, 'please', please)
+                if (exp <= please){
+                    return task.task_id;
+                }
+            })
+            console.log('newTasks', newTasks);
+            if (newTasks[0] !== undefined){
+                DB.removeDeleted(newTasks)
+                .then(rem=>{
+                    rem? 
+                    DB.getDeleted()
+                        .then(deltasks=>res.status(200).json(deltasks))
+                        .catch(err=>{
+                            console.log(err);
+                            res.status(500).json({message:'error retrieving remaining tasks'})
+                        }) : res.status(200).json(tasks);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message: 'server error'})
+                })
+            } else {
+                res.status(200).json(tasks)
+            }
             
-            res.status(200).json(tasks)
+            // res.status(200).json(tasks)
             
         })
         .catch(err=>{

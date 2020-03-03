@@ -58,15 +58,20 @@ function getDeleted(){
         // .join('lists', 'tasks.list_id', 'lists.id')
         // .join('user_lists', 'user_lists.list_id', 'lists.id')
         // .join('users', 'users.id', 'user_lists.user_id')
-        .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
+        // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
+        .select('task_id', 'tasks.description', 'date_deleted', 'date_expired')
 }
 
-function removeDeleted(tasks){
-    const now = Date.now();
-    var offset = new Date().getTimezoneOffset();
-    const date = '2021-01-01T04:00:00.000Z';
-    return db('deleted_tasks').where(tasks.date_expired >= date).del()
+function removeDeleted(taskids){
+    // const now = Date.now();
+    // var offset = new Date().getTimezoneOffset();
+    // const date = '2019-01-01T04:00:00.000Z';
+    // tasks.forEach(task=>{
+    //     return db('deleted_tasks')
+    // })
+    // return db('deleted_tasks').where(tasks.date_expired <= date).del().returning('*')
 
+    return db('deleted_tasks').whereIn('task_id', taskids).del().returning('*')
     }
     
 
