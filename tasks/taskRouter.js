@@ -39,7 +39,9 @@ router.get('/deleted', (req, res)=>{
             if (newTasks[0] !== undefined){
                 DB.removeDeleted(userID, newTasks)
                 .then(rem=>{
-                    rem? 
+
+                    setTimeout(function(){
+                        rem? 
                     DB.getDeleted(userID)
                         .then(deltasks=>{
                             DB.removeTask(newTasks)
@@ -53,6 +55,8 @@ router.get('/deleted', (req, res)=>{
                             console.log(err);
                             res.status(500).json({message:'error retrieving remaining tasks'})
                         }) : res.status(200).json(tasks);
+                     }, 1000);
+                    
                 })
                 .catch(err=>{
                     console.log(err);
