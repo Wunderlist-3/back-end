@@ -72,7 +72,7 @@ function removeDeleted(id, taskids){
         .join('users', 'users.id', 'user_lists.user_id')
         // .select('task_id', 'tasks.description', 'lists.id as list_id', 'date_deleted', 'date_expired')
         .select('task_id', 'lists.id as list_id', 'users.id as user_id', 'tasks.description', 'date_deleted', 'date_expired')
-        .where({user_id: id}).whereIn('task_id', taskids).del().returning('*')
+        .where({user_id: id}).whereIn('task_id', taskids).del()
     }
     
 
