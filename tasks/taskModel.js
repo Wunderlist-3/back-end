@@ -19,8 +19,8 @@ function getTaskById(id){
     return db('tasks').where({id}).returning('*')
 }
 
-function removeTask(id){
-    return db('tasks').where({id}).del();
+function removeTask(tasks){
+    return db('tasks').whereIn('id', tasks).del().returning('*');
 }
 
 function updateTask(id, task){

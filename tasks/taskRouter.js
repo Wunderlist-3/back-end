@@ -76,7 +76,14 @@ router.get('/deleted', (req, res)=>{
                 .then(rem=>{
                     rem? 
                     DB.getDeleted()
-                        .then(deltasks=>res.status(200).json(deltasks))
+                        .then(deltasks=>{
+                            DB.removeTask(newTasks)
+                                .then(del=>res.status(200).json(del))
+                                .catch(err=>{
+                                    console.log(err);
+                                    res.status(500).json({message: 'error actually deleting tasks'})
+                                })
+                        })
                         .catch(err=>{
                             console.log(err);
                             res.status(500).json({message:'error retrieving remaining tasks'})
@@ -121,12 +128,17 @@ router.delete('/deleted/:id', (req, res)=>{
 
 router.delete('/:id', TodaysDate, (req, res)=>{
     date = req.dateObj
+    //add 'deleted' task to the deleted_tasks table
     DB.addToDeleted(req.params.id)
         .then(del=>{
+            //find the task by its id
             DB.getTaskById(req.params.id)
                 .then(task=>{
-                    task[0].deleted = 1;
+                    //mark that task as deleted
+                    task[0].deleted = true;
+                    console.log('from the delete', task);
                     console.log('task', task[0]);
+                    //update the task as deleted in the tasks table
                     DB.updateTask(req.params.id, task[0])
                         .then(updated=>res.status(200).json(updated))
                         .catch(err=>{
