@@ -20,16 +20,17 @@ router.get('/deleted', (req, res)=>{
             // console.log(tasks);
             let newTasks = tasks.map(task=>{
                 const now = Date.now();
-                var offset = new Date().getTimezoneOffset();
+                const offset = new Date().getTimezoneOffset();
                 const date = new Date(now + (offset));
                 console.log('date', now)
                 const expireddate = task.date_expired;
                 const expiredstring = expireddate.toUTCString()
-                const exp1 = Date.now(expiredstring);
+                const exp1 = Date.parse(expiredstring);
                 const exp = Number(exp1)
                 const please = Number(now);
                 // const date = '2020-03-09T04:00:00.000Z';
-                console.log(task);
+                console.log('expired string', expiredstring);
+                console.log('exp1', exp1)
                 console.log('exp', exp, 'please', please)
                 if (exp <= please){
                     return task.task_id;
