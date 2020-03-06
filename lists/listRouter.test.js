@@ -20,7 +20,7 @@ describe('listRouter', ()=>{
 
         describe('Adding a new list', ()=>{
 
-            it('should return something', ()=>{
+            it('should send back name of list', ()=>{
                 return request(server).post('/api/lists/').send({name: 'my new list'}).set('Authorization', token)
                     .then(res=>{
                         console.log('the res', res.body)
